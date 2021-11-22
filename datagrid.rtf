@@ -1,0 +1,261 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fswiss\fcharset0 Helvetica-Bold;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab708
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+
+\f0\fs22 \cf0 \
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trwWidth9360\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf0 \trbrdrl\brdrs\brdrw20\brdrcf0 \trbrdrb\brdrs\brdrw20\brdrcf0 \trbrdrr\brdrs\brdrw20\brdrcf0 
+\clvertalt \clshdrawnil \clwWidth9360\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf0 \clbrdrl\brdrs\brdrw20\brdrcf0 \clbrdrb\brdrs\brdrw20\brdrcf0 \clbrdrr\brdrs\brdrw20\brdrcf0 \clpadt100 \clpadl100 \clpadb100 \clpadr100 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+\cf0 @ProtoDoc("@Indexed")\
+public class PlayerScore \{\
+   private String gameId;\
+   private String userId;\
+   private String username;\
+   private Integer score;\
+\
+   @ProtoFactory\
+   public PlayerScore(String gameId, String userId, String username, Integer score) \{\
+      this.gameId = gameId;\
+      this.userId = userId;\
+      this.username = username;\
+      this.score = score;\
+   \}\
+\
+\
+   @ProtoField(1)\
+   @ProtoDoc("@Field(index=Index.YES, analyze = Analyze.NO, store = Store.YES)")\
+   public String getGameId() \{\
+      return gameId;\
+   \}\
+   @ProtoField(2)\
+   public String getUserId() \{\
+      return userId;\
+   \}\
+\
+   @ProtoField(3)\
+   public String getUsername() \{\
+      return username;\
+   \}\
+\
+   @ProtoField(4)\
+   @ProtoDoc("@Field(index=Index.YES, analyze = Analyze.NO, store = Store.YES)")\
+   @ProtoDoc("@SortableField")\
+   public Integer getScore() \{\
+      return score;\
+   \}\
+\
+   ...\
+\
+\}\cell \lastrow\row
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0 \
+\
+\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trwWidth9360\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf0 \trbrdrl\brdrs\brdrw20\brdrcf0 \trbrdrb\brdrs\brdrw20\brdrcf0 \trbrdrr\brdrs\brdrw20\brdrcf0 
+\clvertalt \clshdrawnil \clwWidth9360\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf0 \clbrdrl\brdrs\brdrw20\brdrcf0 \clbrdrb\brdrs\brdrw20\brdrcf0 \clbrdrr\brdrs\brdrw20\brdrcf0 \clpadt100 \clpadl100 \clpadb100 \clpadr100 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+
+\f1\b \cf0 import 
+\f0\b0 org.infinispan.protostream.GeneratedSchema;\
+
+\f1\b import 
+\f0\b0 org.infinispan.protostream.annotations.AutoProtoSchemaBuilder;\
+\
+@AutoProtoSchemaBuilder(schemaPackageName = 
+\f1\b "com.redhat"
+\f0\b0 ,\
+     includeClasses = \{ PlayerScore.
+\f1\b class
+\f0\b0 \})\
+
+\f1\b public interface 
+\f0\b0 GameSchema 
+\f1\b extends 
+\f0\b0 GeneratedSchema \{\
+\}\cell \lastrow\row
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0 \
+\
+\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trwWidth9360\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf0 \trbrdrl\brdrs\brdrw20\brdrcf0 \trbrdrb\brdrs\brdrw20\brdrcf0 \trbrdrr\brdrs\brdrw20\brdrcf0 
+\clvertalt \clshdrawnil \clwWidth9360\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf0 \clbrdrl\brdrs\brdrw20\brdrcf0 \clbrdrb\brdrs\brdrw20\brdrcf0 \clbrdrr\brdrs\brdrw20\brdrcf0 \clpadt100 \clpadl100 \clpadb100 \clpadr100 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+\cf0 syntax = "proto2";\
+\
+package com.redhat;\
+\
+/**\
+ * @Indexed\
+ */\
+message PlayerScore \{\
+\
+  /**\
+    * @Field(index=Index.YES, analyze = Analyze.NO, store = Store.YES)\
+    */\
+   optional string gameId = 1;\
+   \
+   optional string userId = 2;\
+\
+   optional string username = 3;\
+\
+   /**\
+    * @Field(index=Index.YES, analyze = Analyze.NO, store = Store.YES)\
+    * @SortableField\
+    */\
+   optional int32 score = 4;\
+\}\cell \lastrow\row
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0 \
+\
+\
+\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trwWidth9360\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf0 \trbrdrl\brdrs\brdrw20\brdrcf0 \trbrdrb\brdrs\brdrw20\brdrcf0 \trbrdrr\brdrs\brdrw20\brdrcf0 
+\clvertalt \clshdrawnil \clwWidth9360\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf0 \clbrdrl\brdrs\brdrw20\brdrcf0 \clbrdrb\brdrs\brdrw20\brdrcf0 \clbrdrr\brdrs\brdrw20\brdrcf0 \clpadt100 \clpadl100 \clpadb100 \clpadr100 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+\cf0 @ServerEndpoint("/leaderboard")\
+@ApplicationScoped\
+public class LeaderboardEndpoint \{\
+   \
+   private Map<String, Session> sessions = new ConcurrentHashMap<>();\
+\
+   @Inject\
+   @Remote(\'93players-scores\'94) \
+   private RemoteCache<String, PlayerScore> playersScores;\
+\
+   @OnOpen\
+   public void onOpen(Session session) \{\
+      sessions.put(session.getId(), session);\
+      LOGGER.info("Leaderboard service socket opened");\
+      broadcast();\
+   \}\
+\
+   @Scheduled(every = "1s")\
+   public void broadcast() \{\
+      if(sessions.isEmpty()) \{\
+         return;\
+      \}\
+     \
+      QueryFactory queryFactory = Search.getQueryFactory(playersScores);\
+\pard\intbl\itap1\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0       Query topTenQuery =... // le code du query\
+\
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+\cf0       List<PlayerScore> topTen = topTenQuery.execute().list()\
+\
+      sessions.values().forEach(s -> s.getAsyncRemote().sendObject(topTen.toString(), result -> \{\
+         if (result.getException() != null) \{\
+            LOGGER.error("Leaderboard service got interrupted", result.getException());\
+         \}\
+      \}));\
+   \}\
+  \
+   @OnClose\
+   public void onClose(Session session) \{\
+      sessions.remove(session.getId());\
+      LOGGER.info("Leaderboard Service session has been closed");\
+   \}\
+\
+   @OnError\
+   public void onError(Session session, Throwable throwable) \{\
+      sessions.remove(session.getId());\
+      LOGGER.error("Leaderboard Service session error", throwable);\
+   \}\
+\}\cell \lastrow\row
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0 \
+\
+\
+\
+\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trwWidth9360\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf0 \trbrdrl\brdrs\brdrw20\brdrcf0 \trbrdrb\brdrs\brdrw20\brdrcf0 \trbrdrr\brdrs\brdrw20\brdrcf0 
+\clvertalt \clshdrawnil \clwWidth9360\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf0 \clbrdrl\brdrs\brdrw20\brdrcf0 \clbrdrb\brdrs\brdrw20\brdrcf0 \clbrdrr\brdrs\brdrw20\brdrcf0 \clpadt100 \clpadl100 \clpadb100 \clpadr100 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+\cf0 apiVersion: infinispan.org/v1\
+kind: Infinispan\
+metadata:\
+  name: datagrid\
+spec:\
+  image: quay.io/infinispan/server:12.1.0.Final\
+  container:\
+    cpu: "1000m"\
+    memory: 4Gi\
+  expose:\
+    type: LoadBalancer\
+  replicas: 2\
+  security:\
+    endpointEncryption:\
+      type: None\
+    endpointAuthentication: false\
+  service:\
+    type: DataGrid\
+    sites:\
+      local:\
+        name: SITE_NAME\
+        expose:\
+          type: LoadBalancer\
+      locations:\
+        - name: AWS\
+          url: openshift://api.summit-aws.28ts.p1.openshiftapps.com:6443\
+          secretName: aws-token\
+        - name: GCP\
+          url: openshift://api.summit-gcp.eior.p2.openshiftapps.com:6443\
+          secretName: gcp-token\
+        - name: AZURE\
+          url: openshift://api.g9dkpkud.centralus.aroapp.io:6443\
+          secretName: azure-token\
+  logging:\
+    categories:\
+      org.jgroups.protocols.TCP: error\
+      org.jgroups.protocols.relay.RELAY2: error\cell \lastrow\row
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0 \
+\
+\
+\
+\
+
+\itap1\trowd \taflags1 \trgaph108\trleft-108 \trwWidth9360\trftsWidth3 \trbrdrt\brdrs\brdrw20\brdrcf0 \trbrdrl\brdrs\brdrw20\brdrcf0 \trbrdrb\brdrs\brdrw20\brdrcf0 \trbrdrr\brdrs\brdrw20\brdrcf0 
+\clvertalt \clshdrawnil \clwWidth9360\clftsWidth3 \clbrdrt\brdrs\brdrw20\brdrcf0 \clbrdrl\brdrs\brdrw20\brdrcf0 \clbrdrb\brdrs\brdrw20\brdrcf0 \clbrdrr\brdrs\brdrw20\brdrcf0 \clpadt100 \clpadl100 \clpadb100 \clpadr100 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab708\ri-340\partightenfactor0
+\cf0 --- \
+    apiVersion: infinispan.org/v2alpha1\
+    kind: Cache\
+    metadata: \
+      name: CACHE_NAME\
+    spec: \
+      clusterName: datagrid\
+      name: CACHE_NAME\
+      adminAuth: \
+        secretName: cache-credentials\
+      template: |\
+        <infinispan>\
+            <cache-container>\
+                <distributed-cache name="game" statistics="true">\
+                    <encoding>\
+                        <key media-type="text/plain" />\
+                        <value media-type="text/plain" />\
+                    </encoding>\
+                    <backups>\
+                        <backup site="BACKUP_SITE_1" strategy="ASYNC" enabled="true">\
+                            <take-offline min-wait="60000" after-failures="3" />\
+                        </backup>\
+                        <backup site="BACKUP_SITE_2" strategy="ASYNC" enabled="true">\
+                            <take-offline min-wait="60000" after-failures="3" />\
+                        </backup>\
+                    </backups>\
+                </distributed-cache>\
+            </cache-container>\
+        </infinispan>\cell \lastrow\row
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+\cf0 \
+\
+}

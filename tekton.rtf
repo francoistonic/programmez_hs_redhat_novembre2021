@@ -1,0 +1,372 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1671\cocoasubrtf600
+{\fonttbl\f0\fmodern\fcharset0 CourierNewPSMT;\f1\froman\fcharset0 TimesNewRomanPSMT;}
+{\colortbl;\red255\green255\blue255;\red0\green83\blue139;\red37\green68\blue187;\red0\green0\blue192;
+}
+{\*\expandedcolortbl;;\csgenericrgb\c0\c32549\c54510;\csgenericrgb\c14510\c26667\c73333;\csgenericrgb\c0\c0\c75294;
+}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab708
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0\fs20 \cf2 apiVersion\cf0 : tekton.dev/v1beta1\
+\cf2 kind\cf0 : Task (1)\
+\cf2 metadata\cf0 : (2)\
+  \cf2 name\cf0 : git-clone\
+  \cf2 labels\cf0 :\
+    \cf2 app.kubernetes.io/version\cf0 : \cf3 "0.4"
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0   \cf2 annotation\cf0 :\
+    \cf2 tekton.dev/pipelines.minVersion\cf0 : \cf3 "0.21.0"
+\f1 \cf0 \
+
+\f0     \cf2 tekton.dev/categories\cf0 : Git\
+    \cf2 tekton.dev/tags\cf0 : git\
+    \cf2 tekton.dev/displayName\cf0 : \cf3 "git clone"
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf2 spec\cf0 :\
+  # [\'85]\
+  \cf2 workspaces\cf0 : (3)\
+    - \cf2 name\cf0 : output\
+      \cf2 description\cf0 : The git repo will be cloned onto the volume backing this Workspace.\
+    # [\'85]\
+  \cf2 params\cf0 : (4)\
+    - \cf2 name\cf0 : url\
+      \cf2 description\cf0 : Repository URL to clone from.\
+      \cf2 type\cf0 : string\
+    - \cf2 name\cf0 : revision\
+      \cf2 description\cf0 : Revision to checkout. (branch, tag, sha, ref, etc...)\
+      \cf2 type\cf0 : string\
+      \cf2 default\cf0 : \cf3 ""
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0     # [\'85]\
+  \cf2 results\cf0 : (5)\
+    - \cf2 name\cf0 : commit\
+      \cf2 description\cf0 : The precise commit SHA that was fetched by this Task.\
+    - \cf2 name\cf0 : url\
+      \cf2 description\cf0 : The precise URL that was fetched by this Task.\
+  \cf2 steps\cf0 : (6)\
+    - \cf2 name\cf0 : clone\
+      \cf2 image\cf0 : gcr.io/tekton-releases/github.com/tektoncd/pipeline/cmd/git-init:v0.27.3\
+      \cf2 env\cf0 : (7)\
+      # [\'85]\
+      - \cf2 name\cf0 : PARAM_URL\
+        \cf2 value\cf0 : $(params.url)\
+      - \cf2 name\cf0 : PARAM_REVISION\
+        \cf2 value\cf0 : $(params.revision)\
+      # [\'85]\
+      \cf2 script\cf0 : | (8)\
+        #!/usr/bin/env sh\
+        # [\'85]\
+        /ko-app/git-init \\\
+          -url=\cf3 "$\{params.url\}"\cf0  \\\
+          -revision=\cf3 "$\{PARAM_REVISION\}"\cf0  \\\
+          -refspec=\cf3 "$\{PARAM_REFSPEC\}"\cf0  \\\
+          -path=\cf3 "$\{CHECKOUT_DIR\}"\cf0  \\\
+          -sslVerify=\cf3 "$\{PARAM_SSL_VERIFY\}"\cf0  \\\
+          -submodules=\cf3 "$\{PARAM_SUBMODULES\}"\cf0  \\\
+          -depth=\cf3 "$\{PARAM_DEPTH\}"\cf0  \\\
+          -sparseCheckoutDirectories=\cf3 "$\{PARAM_SPARSE_CHECKOUT_DIRECTORIES\}"
+\f1 \cf0 \
+
+\f0         cd \cf3 "$\{CHECKOUT_DIR\}"
+\f1 \cf0 \
+
+\f0         RESULT_SHA=\cf3 "$(git rev-parse HEAD)"
+\f1 \cf0 \
+
+\f0         # [\'85] (9)\
+        printf \cf3 "%s"\cf0  \cf3 "$\{RESULT_SHA\}"\cf0  > \cf3 "$(results.commit.path)"
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+
+\f0 \cf0         printf \cf3 "%s"\cf0  \cf3 "$\{PARAM_URL\}"\cf0  > \cf3 "$(results.url.path)"
+\f1 \cf0 \
+\pard\tx0\pardeftab708\ri-340\sa120\partightenfactor0
+
+\fs24 \cf0 \
+\
+\pard\pardeftab708\ri-340\partightenfactor0
+\cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\fs20 \cf0 ---\
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf2 apiVersion\cf0 : tekton.dev/v1beta1\
+\cf2 kind\cf0 : Task\
+\cf2 metadata\cf0 :\
+  \cf2 name\cf0 : buildah\
+  # [\'85]\
+\cf2 spec\cf0 :\
+  # [\'85]\
+  \cf2 params\cf0 :\
+  - \cf2 name\cf0 : IMAGE\
+    \cf2 description\cf0 : Reference of the image buildah will produce.\
+  - \cf2 name\cf0 : BUILDER_IMAGE\
+    \cf2 description\cf0 : The location of the buildah builder image.\
+    \cf2 default\cf0 : quay.io/buildah/stable:v1.18.0\
+  # [\'85]\
+  - \cf2 name\cf0 : DOCKERFILE\
+    \cf2 description\cf0 : Path to the Dockerfile to build.\
+    \cf2 default\cf0 : ./Dockerfile\
+  - \cf2 name\cf0 : CONTEXT\
+    \cf2 description\cf0 : Path to the directory to use as context.\
+    \cf2 default\cf0 : .\
+  # [\'85]\
+  \cf2 workspaces\cf0 : (1)\
+  - \cf2 name\cf0 : source\
+  - \cf2 name\cf0 : sslcertdir\
+    \cf2 optional\cf0 : \cf4 true
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0   \cf2 results\cf0 :\
+  - \cf2 name\cf0 : IMAGE_DIGEST\
+    \cf2 description\cf0 : Digest of the image just built.\
+  \cf2 steps\cf0 : (2)\
+  - \cf2 name\cf0 : build (3)\
+    \cf2 image\cf0 : $(params.BUILDER_IMAGE)\
+    \cf2 workingDir\cf0 : $(workspaces.source.path)\
+    \cf2 script\cf0 : |\
+      [[ \cf3 "$(workspaces.sslcertdir.bound)"\cf0  == \cf3 "true"\cf0  ]] && CERT_DIR_FLAG=\cf3 "--cert-dir $(workspaces.sslcertdir.path)"
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf3       buildah $\{CERT_DIR_FLAG\} --storage-driver=$(params.STORAGE_DRIVER) bud \\
+\f1 \cf0 \
+
+\f0 \cf3         $(params.BUILD_EXTRA_ARGS) --format=$(params.FORMAT) \\
+\f1 \cf0 \
+
+\f0 \cf3         --tls-verify=$(params.TLSVERIFY) --no-cache \\
+\f1 \cf0 \
+
+\f0 \cf3         -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0     # [\'85]\
+  - \cf2 name\cf0 : push\
+    \cf2 image\cf0 : $(params.BUILDER_IMAGE)\
+    \cf2 workingDir\cf0 : $(workspaces.source.path)\
+    \cf2 script\cf0 : |\
+      [[ \cf3 "$(workspaces.sslcertdir.bound)"\cf0  == \cf3 "true"\cf0  ]] && CERT_DIR_FLAG=\cf3 "--cert-dir $(workspaces.sslcertdir.path)"
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf3       buildah $\{CERT_DIR_FLAG\} --storage-driver=$(params.STORAGE_DRIVER) push \\
+\f1 \cf0 \
+
+\f0 \cf3         $(params.PUSH_EXTRA_ARGS) --tls-verify=$(params.TLSVERIFY) \\
+\f1 \cf0 \
+
+\f0 \cf3         --digestfile $(workspaces.source.path)/image-digest $(params.IMAGE) \\
+\f1 \cf0 \
+
+\f0 \cf3         docker://$(params.IMAGE)
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0   # [\'85]\
+  - \cf2 name\cf0 : digest-to-results\
+    \cf2 image\cf0 : $(params.BUILDER_IMAGE)\
+    \cf2 script\cf0 : cat $(workspaces.source.path)/image-digest | tee /tekton/results/IMAGE_DIGEST\
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+\cf0   # [\'85]\
+\pard\tx0\pardeftab708\ri-340\sa120\partightenfactor0
+
+\f1\fs24 \cf0 \
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+
+\f0\fs20 \cf0 kubectl apply -f https://raw.githubusercontent.com/tektoncd/catalog/main/task/kubernetes-actions/0.2/kubernetes-actions.yaml\
+\pard\pardeftab708\ri-340\partightenfactor0
+\cf0 # [\'85]\
+\pard\pardeftab708\ri-340\partightenfactor0
+\cf2 spec\cf0 :\
+  # [\'85]\
+  \cf2 workspaces\cf0 :\
+    - \cf2 name\cf0 : manifest-dir (1)\
+      \cf2 optional\cf0 : \cf4 true
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0     - \cf2 name\cf0 : kubeconfig-dir (2)\
+      \cf2 optional\cf0 : \cf4 true
+\f1 \cf0 \
+
+\f0   \cf2 results\cf0 :\
+    - \cf2 name\cf0 : output-result\
+      \cf2 description\cf0 : some result can be emitted if someone wants to.\
+  \cf2 params\cf0 :\
+    - \cf2 name\cf0 : script (4)\
+      \cf2 description\cf0 : The Kubernetes CLI script to run\
+      \cf2 type\cf0 : string\
+      \cf2 default\cf0 : \cf3 "kubectl $@"
+\f1 \cf0 \
+
+\f0     - \cf2 name\cf0 : args (5)\
+      \cf2 description\cf0 : The Kubernetes CLI arguments to run\
+      \cf2 type\cf0 : array\
+      \cf2 default\cf0 :\
+        - \cf3 "help"
+\f1 \cf0 \
+
+\f0     # [\'85]\
+  \cf2 steps\cf0 :\
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+\cf0     # [\'85]\
+\pard\tx0\pardeftab708\li720\ri-340\sa120\partightenfactor0
+
+\f1\fs24 \cf0 \
+\pard\tx0\pardeftab708\li360\ri-340\sa120\partightenfactor0
+\cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+\cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0\fs20 \cf2 apiVersion\cf0 : tekton.dev/v1beta1\
+\cf2 kind\cf0 : Pipeline (1)\
+\cf2 metadata\cf0 :\
+  \cf2 name\cf0 : build-and-deploy\
+\cf2 spec\cf0 :\
+  \cf2 workspaces\cf0 :\
+  - \cf2 name\cf0 : shared-workspace (2)\
+  \cf2 params\cf0 : (3)\
+  - \cf2 name\cf0 : git-url\
+    \cf2 type\cf0 : string\
+  - \cf2 name\cf0 : git-revision\
+    \cf2 type\cf0 : string\
+    \cf2 default\cf0 : \cf3 "main"
+\f1 \cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0 \cf0   - \cf2 name\cf0 : image\
+    \cf2 type\cf0 : string\
+  \cf2 tasks\cf0 : (4)\
+  - \cf2 name\cf0 : fetch-repository\
+    \cf2 taskRef\cf0 :\
+      \cf2 name\cf0 : git-clone\
+    \cf2 workspaces\cf0 :\
+    - \cf2 name\cf0 : output\
+      \cf2 workspace\cf0 : shared-workspace\
+    \cf2 params\cf0 :\
+    - \cf2 name\cf0 : url\
+      \cf2 value\cf0 : $(params.git-url)\
+  - \cf2 name\cf0 : build-image\
+    \cf2 taskRef\cf0 :\
+      \cf2 name\cf0 : buildah\
+    \cf2 params\cf0 :\
+    - \cf2 name\cf0 : IMAGE\
+      \cf2 value\cf0 : $(params.image)\
+    \cf2 workspaces\cf0 :\
+    - \cf2 name\cf0 : source\
+      \cf2 workspace\cf0 : shared-workspace\
+    \cf2 runAfter\cf0 : (5)\
+    - fetch-repository\
+  - \cf2 name\cf0 : deploy-app\
+    \cf2 taskRef\cf0 :\
+      \cf2 name\cf0 : kubernetes-actions\
+    \cf2 workspaces\cf0 :\
+    - \cf2 name\cf0 : manifest-dir\
+      \cf2 workspace\cf0 : shared-workspace\
+    \cf2 params\cf0 :\
+    - \cf2 name\cf0 : script\
+      \cf2 value\cf0 : |\
+        \cf3 kubectl apply -f manifests/
+\f1 \cf0 \
+
+\f0     \cf2 runAfter\cf0 :\
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+\cf0     - build-image\
+\pard\tx0\pardeftab708\li720\ri-340\sa120\partightenfactor0
+
+\f1\fs24 \cf0 \
+\
+\pard\pardeftab708\ri-340\partightenfactor0
+\cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0\fs20 \cf2 apiVersion\cf0 : tekton.dev/v1beta1\
+\cf2 kind\cf0 : PipelineRun (1)\
+\cf2 metadata\cf0 :\
+  \cf2 generateName\cf0 : build-deploy-pipelinerun- (2)\
+\cf2 spec\cf0 :\
+  \cf2 pipelineRef\cf0 : (3)\
+    \cf2 name\cf0 : build-and-deploy\
+  \cf2 params\cf0 : (4)\
+  - \cf2 name\cf0 : git-url\
+    \cf2 value\cf0 : https://github.com/vdemeester/go-helloworld-app.git\
+  - \cf2 name\cf0 : image\
+    \cf2 value\cf0 : quay.io/vdemeest/go-helloworld\
+  \cf2 serviceAccountName\cf0 : sa-hub-vdemeester-foo (5)\
+  \cf2 workspaces\cf0 :\
+  - \cf2 name\cf0 : shared-workspace (6)\
+    \cf2 volumeClaimTemplate\cf0 :\
+      \cf2 spec\cf0 :\
+        \cf2 accessModes\cf0 :\
+          - ReadWriteOnce\
+        \cf2 resources\cf0 :\
+          \cf2 requests\cf0 :\
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+\cf0             \cf2 storage\cf0 : 500Mi\
+\pard\tx0\pardeftab708\li720\ri-340\sa120\partightenfactor0
+
+\f1\fs24 \cf0 \
+\
+\pard\pardeftab708\ri-340\partightenfactor0
+\cf0 \
+\pard\pardeftab708\ri-340\partightenfactor0
+
+\f0\fs20 \cf0 $ tkn pipelinerun logs -f build-deploy-pipelinerun-jj59z\
+# [\'85]\
+[fetch-repository : clone] + /ko-app/git-init \cf3 '-url=https://github.com/vdemeester/go-helloworld-app.git'\cf0  \cf3 '-revision='\cf0  \cf3 '-refspec='\cf0  \cf3 '-path=/workspace/output/'\cf0  \cf3 '-sslVerify=true'\cf0  \cf3 '-submodules=true'\cf0  \cf3 '-depth=1'\cf0  \cf3 '-sparseCheckoutDirectories='
+\f1 \cf0 \
+
+\f0 [fetch-repository : clone] \{\cf3 "level"\cf0 :\cf3 "info"
+\f1 \cf0 ,
+\f0 \cf3 "ts"\cf0 :1631694832.8834538,\cf3 "caller"\cf0 :\cf3 "git/git.go:169"
+\f1 \cf0 ,
+\f0 \cf3 "msg"\cf0 :\cf3 "Successfully cloned https://github.com/vdemeester/go-helloworld-app.git @ dd9473987aa399172626520ed6e837e0de7b4569 (grafted, HEAD) in path /workspace/output/"
+\f1 \cf0 \}\
+
+\f0 [fetch-repository : clone] \{\cf3 "level"\cf0 :\cf3 "info"
+\f1 \cf0 ,
+\f0 \cf3 "ts"\cf0 :1631694832.900327,\cf3 "caller"\cf0 :\cf3 "git/git.go:207"
+\f1 \cf0 ,
+\f0 \cf3 "msg"\cf0 :\cf3 "Successfully initialized and updated submodules in path /workspace/output/"
+\f1 \cf0 \}\
+
+\f0 # [\'85]\
+[build-image : build] + buildah --storage-driver=overlay bud --format=oci --tls-verify=true --no-cache -f ./Dockerfile -t quay.io/vdemeest/go-helloworld .\
+[build-image : build] STEP 1: FROM docker.io/library/golang:1.16 AS builder\
+[build-image : build] Getting image source signatures\
+[build-image : build] Copying blob sha256:911ea9f2bd51e53a455297e0631e18a72a86d7e2c8e1807176e80f991bde5d64\
+# [\'85]\
+[build-image : build] STEP 7: ENTRYPOINT [\cf3 "/helloworld"\cf0 ]\
+[build-image : build] STEP 8: COMMIT quay.io/vdemeest/go-helloworld\
+[build-image : build] --> aade6b0f8ed\
+[build-image : build] aade6b0f8ed34111cab39f981440b9fcd6cdc658bddb15c8407780e67c4d5d09\
+# [\'85]\
+[build-image : push] + buildah --storage-driver=overlay push --tls-verify=true --digestfile /workspace/source/image-digest quay.io/vdemeest/go-helloworld docker://quay.io/vdemeest/go-helloworld\
+# [\'85]\
+[build-image : push] Storing signatures\
+[build-image : digest-to-results] + cat /workspace/source/image-digest\
+[build-image : digest-to-results] + tee /tekton/results/IMAGE_DIGEST\
+[build-image : digest-to-results] sha256:1c43f2938af866b9caa1c56cbedaa49847be71392a4b1b498cc8f902d69ace77\
+[deploy-app : kubectl] service/helloworld created\
+\pard\pardeftab708\ri-340\sa119\partightenfactor0
+\cf0 [deploy-app : kubectl] deployment.apps/helloworld created\
+\pard\pardeftab708\ri-340\sa120\partightenfactor0
+
+\f1\fs24 \cf0 \
+\
+\pard\pardeftab708\ri-340\sl276\slmult1\partightenfactor0
+
+\fs22 \cf0 \
+}
